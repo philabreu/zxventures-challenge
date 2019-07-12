@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.bedatadriven.jackson.datatype.jts.serialization.GeometryDeserializer;
 import com.bedatadriven.jackson.datatype.jts.serialization.GeometrySerializer;
@@ -38,18 +39,21 @@ public class PDV implements Serializable {
 	private Long id;
 
 	@NotNull
+	@Size(max=30)
 	@Getter
 	@Setter
 	@Column(name = "trading_name")
 	private String tradingName;
 
 	@NotNull
+	@Size(max=30)
 	@Getter
 	@Setter
 	@Column(name = "owner_name")
 	private String ownerName;
 
 	@NotNull
+	@Size(max=30)
 	@Getter
 	@Setter
 	@Column(name = "document")

@@ -28,14 +28,14 @@ public class PDVService {
 	public PDVvo findById(Long id) {
 		LOGGER.debug("calling findById method in PDVService:");
 		try {
-			PDV pdvSearched = repository.findOne(id);
+			PDV searchedPdv = repository.findOne(id);
 
-			if (pdvSearched == null) {
+			if (searchedPdv == null) {
 				throw new EmptyResultDataAccessException("no register found!", 1);
 			}
 
 			PDVvo pdvVO = new PDVvo();
-			return this.buildVO(pdvSearched, pdvVO);
+			return this.buildVO(searchedPdv, pdvVO);
 		} catch (HttpClientErrorException e) {
 			LOGGER.error(ExceptionUtils.getStackTrace(e));
 			LOGGER.error(ExceptionUtils.getRootCauseMessage(e));
@@ -69,28 +69,29 @@ public class PDVService {
 	public PDVvo searchClosestPartner(PDV pdv) {
 		LOGGER.debug("calling searchClosestPartner method in CategoryService:");
 		try {
-			List<PDV> pdvSearched = this.findAll();
+			List<PDV> searchedPdv = this.findAll();
 
 			Double pdvDistance = 0.0;
 			Double lessDistant = Double.MAX_VALUE;
-			PDV nearestPDV = null;
+			
+			PDV closestPDV = null;
 
-			for (PDV pdvItem : pdvSearched) {
+			for (PDV pdvItem : searchedPdv) {
 				if (!(pdv.getAddress().equalsExact(pdvItem.getAddress()))) {
 					pdvDistance = pdvItem.getDistance(pdv.getAddress().getY(), pdv.getAddress().getX());
 					if (pdvDistance < lessDistant) {
 						lessDistant = pdvDistance;
-						nearestPDV = pdvItem;
+						closestPDV = pdvItem;
 					}
 				}
 			}
 
-			if (nearestPDV == null) {
+			if (closestPDV == null) {
 				throw new RuntimeException("no nearby PDV was found.");
 			}
 			PDVvo pdvVO = new PDVvo();
 
-			return this.buildVO(nearestPDV, pdvVO);
+			return this.buildVO(closestPDV, pdvVO);
 		} catch (HttpClientErrorException e) {
 			LOGGER.error(ExceptionUtils.getStackTrace(e));
 			LOGGER.error(ExceptionUtils.getRootCauseMessage(e));
@@ -105,13 +106,13 @@ public class PDVService {
 
 	private List<PDV> findAll() {
 		LOGGER.debug("calling findAll method in PDVService:");
-		List<PDV> pdvSearched = repository.findAll();
+		List<PDV> searchedPdv = repository.findAll();
 
-		if (pdvSearched == null) {
+		if (searchedPdv == null) {
 			throw new EmptyResultDataAccessException("no register found!", 1);
 		}
 
-		return pdvSearched;
+		return searchedPdv;
 	}
 
 	private void verifyDocument(String document) {
