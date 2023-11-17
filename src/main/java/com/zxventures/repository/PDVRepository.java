@@ -7,7 +7,5 @@ import com.zxventures.model.PDV;
 
 @Repository
 public interface PDVRepository extends JpaRepository<PDV, Long> {
-
 	PDV findByDocument(String document);
-
 }
